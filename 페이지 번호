@@ -1,0 +1,67 @@
+@코드 설명
+
+<div th:if="${!questionList.isEmpty()}">
+	<ul class="pagination justify-content-center">
+		<li class="page-item"  th:classappend="${!questionList.hasPrevious} ?'disabled'">
+			<a class="page-link" th:href="@{|?page=${questionList.number-1}|}"><span>이전</span></a>
+		</li>
+		<li class="page-item"  th:each="page : ${#numbers.sequence(0,questionList.totalPages-1)}"
+			th:if="${page >= questionList.number-5 and page <= questionList.number+5}"
+			th:classappend="${page == questionList.number} ? 'active'">
+			<a class="page-link"  th:text="${page}" th:href="@{|?page=${page}|}"></a>
+		</li>
+		<li class="page-item"  th:classappend="${!questionList.hasNext} ? 'disabled'">
+			<a class="page-link"  th:href="@{|?page=${questionList.number+1}|}"><span>다음</span></a>
+		</li>
+	</ul>
+</div>
+
+이 코드는 웹 페이지에서 여러 페이지로 나뉜 질문 목록을 보여줄 때, 
+페이지를 이동할 수 있는 버튼(이전, 다음, 페이지 번호)을 만들어주는 부분이에요. 
+쉽게 말해서, 페이지를 넘길 수 있는 네비게이션 바를 만드는 코드예요.
+
+### 상세 설명
+
+#### 1. `<div th:if="${!questionList.isEmpty()}">`
+이 부분은 질문 목록이 비어있지 않은 경우에만 아래의 코드를 실행하도록 하는 조건문이에요.
+
+- **`th:if="${!questionList.isEmpty()}"`**: `questionList`가 비어있지 않으면(true), 안의 내용을 실행해요.
+
+#### 2. `<ul class="pagination justify-content-center">`
+이 부분은 페이지 네비게이션 바의 시작을 나타내요.
+
+- **`<ul>`**: 목록을 나타내는 태그예요.
+- **`class="pagination justify-content-center"`**: 네비게이션 바를 가운데 정렬하고 스타일을 적용하는 클래스예요.
+
+#### 3. `<li class="page-item" th:classappend="${!questionList.hasPrevious} ?'disabled'">`
+이 부분은 "이전" 버튼을 만들어요. 이전 페이지가 없으면 버튼을 비활성화(disabled)해요.
+
+- **`<li>`**: 목록의 항목을 나타내는 태그예요.
+- **`th:classappend="${!questionList.hasPrevious} ?'disabled'"`**: `questionList`에 이전 페이지가 없으면(hasPrevious가 false) 'disabled' 클래스를 추가해요.
+- **`<a class="page-link" th:href="@{|?page=${questionList.number-1}|}"><span>이전</span></a>`**: '이전' 버튼을 클릭하면 현재 페이지 번호에서 1을 뺀 페이지로 이동해요.
+
+#### 4. `<li class="page-item" th:each="page : ${#numbers.sequence(0,questionList.totalPages-1)}"`
+이 부분은 각 페이지 번호를 표시하는 버튼을 만들어요.
+
+- **`th:each="page : ${#numbers.sequence(0,questionList.totalPages-1)}"`**: 0부터 총 페이지 수-1까지의 숫자들을 순서대로 반복해요.
+- **`th:if="${page >= questionList.number-5 and page <= questionList.number+5}"`**: 현재 페이지를 기준으로 앞뒤로 5개의 페이지 번호만 보여줘요.
+- **`th:classappend="${page == questionList.number} ? 'active'"`**: 현재 페이지 번호와 같으면 'active' 클래스를 추가해요.
+- **`<a class="page-link" th:text="${page}" th:href="@{|?page=${page}|}"></a>`**: 페이지 번호를 클릭하면 해당 페이지로 이동해요.
+
+#### 5. `<li class="page-item" th:classappend="${!questionList.hasNext} ? 'disabled'">`
+이 부분은 "다음" 버튼을 만들어요. 다음 페이지가 없으면 버튼을 비활성화해요.
+
+- **`th:classappend="${!questionList.hasNext} ? 'disabled'"`**: `questionList`에 다음 페이지가 없으면(hasNext가 false) 'disabled' 클래스를 추가해요.
+- **`<a class="page-link" th:href="@{|?page=${questionList.number+1}|}"><span>다음</span></a>`**: '다음' 버튼을 클릭하면 현재 페이지 번호에서 1을 더한 페이지로 이동해요.
+
+### 비유로 설명하기
+
+이걸 더 쉽게 이해할 수 있도록 비유를 들어볼게요. 만약 여러분이 책을 읽고 있는데, 이 책은 여러 페이지로 나뉘어 있어요. 여러분은 페이지를 넘기면서 책을 읽어야 해요.
+
+1. **질문 목록이 비어있지 않은지 확인**: 책에 내용이 있어야 페이지를 넘길 수 있어요.
+2. **페이지 네비게이션 바**: 책의 맨 아래에 페이지를 넘길 수 있는 버튼들이 있어요.
+3. **이전 버튼**: 이전 페이지로 가는 버튼이에요. 첫 페이지에서는 버튼이 작동하지 않아요.
+4. **페이지 번호 버튼**: 현재 페이지 주변의 10개 페이지 번호가 보여요. 현재 페이지는 강조되어 있어요.
+5. **다음 버튼**: 다음 페이지로 가는 버튼이에요. 마지막 페이지에서는 버튼이 작동하지 않아요.
+
+이렇게 하면 여러분은 책을 읽으면서 페이지를 쉽게 넘길 수 있어요. 이 코드는 웹 페이지에서 질문 목록을 볼 때 페이지를 쉽게 넘길
